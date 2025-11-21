@@ -15,11 +15,12 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 @app.post("/convert")
 def convert_pdf(file: UploadFile = File(...)):
-    file_location = os.path.join(UPLOAD_DIR, file.filename)
+    filename = os.path.basename(file.filename)
+    file_location = os.path.join(UPLOAD_DIR, filename)
     with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    output_filename = os.path.splitext(file.filename)[0] + ".epub"
+    output_filename = os.path.splitext(filename)[0] + ".epub"
     output_path = os.path.join(OUTPUT_DIR, output_filename)
 
     pdf_to_epub(file_location, output_path)
